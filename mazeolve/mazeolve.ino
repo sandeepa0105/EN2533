@@ -38,6 +38,40 @@ float KD = 10 ;
 int direction = 1;
   
 
+  
+void setup() {
+
+  for (int i = 0; i<JUNCTION_SIZE; i++){
+    junctions[i] = 0;
+    taken_directions[i] = 0;
+  }
+  
+  Serial.begin(9600) ;
+  pinMode(22, INPUT) ;
+  pinMode(24, INPUT) ;
+  pinMode(26, INPUT) ;
+  pinMode(28, INPUT) ;
+  pinMode(30, INPUT) ;
+  pinMode(32, INPUT) ;
+
+
+  pinMode(2, OUTPUT) ;
+  pinMode(3, OUTPUT) ;
+  pinMode(4, OUTPUT) ;
+  pinMode(7, OUTPUT) ;
+  pinMode(5, OUTPUT) ;
+  pinMode(6, OUTPUT) ;
+
+  set_motor_speed()  ;
+  forward() ;
+  delay(500) ;
+  
+}
+
+
+
+
+
 
 
 
@@ -73,7 +107,7 @@ void loop() {
         turn_left();                  
       }
       
-    }      
+          
     }else if(is_MR()){
       little_forward();
       
@@ -183,71 +217,71 @@ void loop() {
 
 
 
-  }else if(direction == 0){
+  // }else if(direction == 0){
 
-    if (is_LM()){
-      little_forward();
-      if (is_None()){
-        turn_left();
-      }else if (is_M()){
-        // -|
-        if(taken_directions[junction_id--] == 0){
-          PID();
-          forward();
-        }else{
-          turn_left();
-        }          
-      }
+  //   if (is_LM()){
+  //     little_forward();
+  //     if (is_None()){
+  //       turn_left();
+  //     }else if (is_M()){
+  //       // -|
+  //       if(taken_directions[junction_id--] == 0){
+  //         PID();
+  //         forward();
+  //       }else{
+  //         turn_left();
+  //       }          
+  //     }
 
           
-    }else if(is_MR()){
-      little_forward();
-      if (is_None()){
-        turn_right();
-      }else if (is_M()){            
-        // |-
-        if(taken_directions[junction_id--] == 0){
-          turn_right();
-        }else{
-          PID();
-          forward();
-        }  
-      }
+  //   }else if(is_MR()){
+  //     little_forward();
+  //     if (is_None()){
+  //       turn_right();
+  //     }else if (is_M()){            
+  //       // |-
+  //       if(taken_directions[junction_id--] == 0){
+  //         turn_right();
+  //       }else{
+  //         PID();
+  //         forward();
+  //       }  
+  //     }
       
-    }else if (is_LMR()){
-      little_forward();
-      if (is_None()){      
-        // T
-        if(taken_directions[junction_id--] == 0){
-          turn_right();
-        }else{
-          turn_left();
-        } 
+  //   }else if (is_LMR()){
+  //     little_forward();
+  //     if (is_None()){      
+  //       // T
+  //       if(taken_directions[junction_id--] == 0){
+  //         turn_right();
+  //       }else{
+  //         turn_left();
+  //       } 
 
-      }else if(is_M()){
-        // -|-
-        if(taken_directions[junction_id] == 0){
-          turn_right();
-        }else if(taken_directions[junction_id] == 1){
-          PID();
-          forward();
-        }else {
-          turn_left();
-        } 
-      }
-      turn_left();
+  //     }else if(is_M()){
+  //       // -|-
+  //       if(taken_directions[junction_id] == 0){
+  //         turn_right();
+  //       }else if(taken_directions[junction_id] == 1){
+  //         PID();
+  //         forward();
+  //       }else {
+  //         turn_left();
+  //       } 
+  //     }
+  //     turn_left();
 
-    }else if(is_None()){
-      Serial.println("Cannot happen");
-    // cannot happen
+  //   }else if(is_None()){
+  //     Serial.println("Cannot happen");
+  //   // cannot happen
 
 
-    }else if(is_M()){
-      PID();
-      forward();    
-    }
+  //   }else if(is_M()){
+  //     PID();
+  //     forward();    
+  //   }
+  // }
   }
-
   PID() ;
   set_motor_speed() ;
 
@@ -318,7 +352,7 @@ int is_MR(){
 }
 
 int is_M(){
-  if( IR_val[0] && IR_val[1] && IR_val[4] && IR_val[5] && ()){
+  if( IR_val[0] && IR_val[1] && IR_val[4] && IR_val[5] && (IR_val[2] || IR_val[3])){
     return 1;
   }else{
     return 0;
